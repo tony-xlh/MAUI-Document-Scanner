@@ -5,11 +5,11 @@ using System.Diagnostics;
 
 namespace DWT_REST_MAUI
 {
-    public class WpfWebViewBridge : IWebViewBridge
+    public class HybridWebViewBridge : IWebViewBridge
     {
         private Microsoft.Maui.Controls.HybridWebView _webView;
 
-        public WpfWebViewBridge(Microsoft.Maui.Controls.HybridWebView webView)
+        public HybridWebViewBridge(Microsoft.Maui.Controls.HybridWebView webView)
         {
             _webView = webView;
 
@@ -65,7 +65,7 @@ namespace DWT_REST_MAUI
             options.SiteUrl = "index.html";
             options.MessageType = "__RawMessage";
             _documentViewer = new Dynamsoft.WebViewer.DocumentViewer(options,
-                new WpfWebViewBridge(webView),
+                new HybridWebViewBridge(webView),
                 new Uri("http://127.0.0.1:18622"));
 
             await _documentViewer.EnsureInitializedAsync();
