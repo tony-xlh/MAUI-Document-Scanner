@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.13.35931.197 d17.13
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DWT-REST-MAUI", "DWT-REST-MAUI\DWT-REST-MAUI.csproj", "{2062BCA1-BA4B-484F-8370-5A05B7A7CC0B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2062BCA1-BA4B-484F-8370-5A05B7A7CC0B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2062BCA1-BA4B-484F-8370-5A05B7A7CC0B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2062BCA1-BA4B-484F-8370-5A05B7A7CC0B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2062BCA1-BA4B-484F-8370-5A05B7A7CC0B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {86DE2061-2D0E-46E8-8389-8FDAA0697295}
+	EndGlobalSection
+EndGlobal
