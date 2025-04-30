@@ -84,7 +84,8 @@ namespace DWT_REST_MAUI
             };
         }
 
-        private void OnSettingsItemClicked(object sender, EventArgs args) { 
+        private async void OnSettingsItemClicked(object sender, EventArgs args) {
+            await Shell.Current.GoToAsync("SettingsPage");
         }
 
         private void OnEditItemClicked(object sender, EventArgs args)
