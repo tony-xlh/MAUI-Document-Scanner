@@ -84,7 +84,16 @@ namespace DWT_REST_MAUI
             };
         }
 
-        private async void OnStartScanButtonClicked(object sender, EventArgs args)
+        private void OnSettingsItemClicked(object sender, EventArgs args) { 
+        }
+
+        private void OnEditItemClicked(object sender, EventArgs args)
+        {
+            _documentViewer.ShowEditor();
+        }
+
+
+        private async void OnScanItemClicked(object sender, EventArgs args)
         {
             try
             {

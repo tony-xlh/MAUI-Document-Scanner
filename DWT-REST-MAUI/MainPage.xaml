@@ -2,20 +2,24 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="DWT_REST_MAUI.MainPage">
-
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Scan"
+                     Order="Secondary"
+                     Clicked="OnScanItemClicked"
+                     />
+        <ToolbarItem Text="Edit"
+                     Order="Secondary" 
+                     Clicked="OnEditItemClicked"
+                     />
+        <ToolbarItem Text="Settings"
+                     Order="Secondary" 
+                     Clicked="OnSettingsItemClicked"
+                     />
+    </ContentPage.ToolbarItems>
     <Grid RowDefinitions="Auto,*"
           ColumnDefinitions="*">
-        <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
-            <Button Text="Start Scanning" 
-                Clicked="OnStartScanButtonClicked"
-                VerticalOptions="Center"
-                HorizontalOptions="Center"
-            />
-        </StackLayout>
-
         <ScrollView Grid.Row="1">
             <HybridWebView x:Name="webView" />
         </ScrollView>
     </Grid>
-
 </ContentPage>
