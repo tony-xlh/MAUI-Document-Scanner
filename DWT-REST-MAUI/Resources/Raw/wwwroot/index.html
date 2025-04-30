@@ -94,10 +94,47 @@
     await Dynamsoft.DDV.Core.init();
     Dynamsoft.DDV.setProcessingHandler("imageFilter", new Dynamsoft.DDV.ImageFilter());
     let groupUid = "uniqueGroupId";
+    const config = {
+      type: Dynamsoft.DDV.Elements.Layout,
+      flexDirection: "column",
+      className: "ddv-edit-viewer-mobile",
+      children: [
+        {
+          type: Dynamsoft.DDV.Elements.Layout,
+          className: "ddv-edit-viewer-header-mobile",
+          children: [
+            {
+              // Add a "Back" buttom to header and bind click event to go back to the perspective viewer
+              // The event will be registered later.
+              type: Dynamsoft.DDV.Elements.Button,
+              className: "ddv-button-back",
+              events:{
+                click: "back"
+              }
+            },
+            Dynamsoft.DDV.Elements.Pagination
+          ],
+        },
+        Dynamsoft.DDV.Elements.MainView,
+        {
+          type: Dynamsoft.DDV.Elements.Layout,
+          className: "ddv-edit-viewer-footer-mobile",
+          children: [
+            Dynamsoft.DDV.Elements.DisplayMode,
+            Dynamsoft.DDV.Elements.RotateLeft,
+            Dynamsoft.DDV.Elements.Crop,
+            Dynamsoft.DDV.Elements.Filter,
+            Dynamsoft.DDV.Elements.Undo,
+            Dynamsoft.DDV.Elements.Delete,
+            Dynamsoft.DDV.Elements.Load,
+          ],
+        },
+      ],
+    };
     editViewer = new Dynamsoft.DDV.EditViewer({
       groupUid: groupUid,
       container: "container",
-      uiConfig: Dynamsoft.DDV.getDefaultUiConfig("editViewer", { includeAnnotationSet: true }),
+      uiConfig: config,
     });
     browseViewer = new Dynamsoft.DDV.BrowseViewer({
       groupUid: groupUid,
@@ -105,6 +142,9 @@
     });
     editViewer.hide();
     browseViewer.show();
+    editViewer.on("back",() => {
+      hideEditor();
+    });
     // send back to .net
     const result = [{
       name: name,
