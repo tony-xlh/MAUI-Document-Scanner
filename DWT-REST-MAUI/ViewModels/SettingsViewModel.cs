@@ -166,10 +166,12 @@ internal class SettingsViewModel : INotifyPropertyChanged
 
     // Save Command
     public ICommand SaveSettingsCommand { get; }
+    public ICommand LoadScannersCommand { get; }
 
     public SettingsViewModel()
     {
         SaveSettingsCommand = new Command(ExecuteSaveSettings);
+        LoadScannersCommand = new Command(LoadScanners);
     }
 
     public void LoadPreferences() {

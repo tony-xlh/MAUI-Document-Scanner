@@ -30,12 +30,9 @@
                         ItemsSource="{Binding ScannerModels}"
                         SelectedItem="{Binding SelectedScannerModel}">
                     <Picker.Items>
-                        <x:String>HP ScanJet Pro 2500</x:String>
-                        <x:String>Epson DS-530</x:String>
-                        <x:String>Canon DR-C225</x:String>
-                        <x:String>Fujitsu ScanSnap iX1500</x:String>
                     </Picker.Items>
                 </Picker>
+                <Button Text="Reload" Command="{Binding LoadScannersCommand}"></Button>
             </VerticalStackLayout>
 
             <!-- DPI Radio Buttons -->
