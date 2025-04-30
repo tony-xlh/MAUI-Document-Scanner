@@ -190,7 +190,7 @@ internal class SettingsViewModel : INotifyPropertyChanged
             Is600Dpi = true;
         }
         SelectedColorMode = Preferences.Get("ColorMode", "Color");
-        if (SelectedColorMode == "Blackwhite")
+        if (SelectedColorMode == "BlackWhite")
         {
             IsBlackWhite = true;
         }

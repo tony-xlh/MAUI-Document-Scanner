@@ -98,15 +98,47 @@ namespace DWT_REST_MAUI
         {
             try
             {
-                var scanners = await _documentViewer.DWTClient.ScannerControlClient.Manager.Get(EnumDeviceTypeMask.DT_TWAINSCANNER);
+                var license = Preferences.Get("License", "");
+                var DPI = Preferences.Get("DPI", 150);
+                var colorMode = Preferences.Get("ColorMode", "Color");
+                var IPAddress = Preferences.Get("IP", "https://127.0.0.1:18623");
+                var scannerName = Preferences.Get("Scanner", "");
+                var client = new DWTClient(new Uri(IPAddress), license);
+                _documentViewer.UpdateRESRClient(client);
                 CreateScanJobOptions options = new CreateScanJobOptions();
-                options.Device = scanners[1].Device;
                 options.AutoRun = false;
                 options.RequireWebsocket = false;
                 options.Config = new ScannerConfiguration();
                 options.Config.XferCount = 7;
                 options.Config.IfFeederEnabled = true;
                 options.Config.IfDuplexEnabled = true;
+                Debug.WriteLine(colorMode);
+                if (colorMode == "Color")
+                {
+                    Debug.WriteLine("scan in color");
+                    options.Config.PixelType = EnumDWT_PixelType.TWPT_RGB;
+                }
+                else if (colorMode == "BlackWhite")
+                {
+                    Debug.WriteLine("scan in black white");
+                    options.Config.PixelType = EnumDWT_PixelType.TWPT_BW;
+                }
+                else if (colorMode == "Grayscale")
+                {
+                    Debug.WriteLine("scan in grayscale");
+                    options.Config.PixelType = EnumDWT_PixelType.TWPT_GRAY;
+                }
+                if (!string.IsNullOrEmpty(scannerName))
+                {
+                    var scanners = await _documentViewer.DWTClient.ScannerControlClient.Manager.Get(EnumDeviceTypeMask.DT_TWAINSCANNER);
+                    foreach (var scanner in scanners)
+                    {
+                        if (scanner.Name == scannerName)
+                        {
+                            options.Device = scanner.Device;
+                        }
+                    }
+                }
                 await _documentViewer.ScanImageToView(options);
             }
             catch (Exception ex)
