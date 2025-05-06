@@ -22,9 +22,8 @@
              />
     </ContentPage.ToolbarItems>
     <Grid RowDefinitions="Auto,*"
-          ColumnDefinitions="*">
-        <ScrollView Grid.Row="1">
-            <HybridWebView x:Name="webView" />
-        </ScrollView>
+      ColumnDefinitions="*">
+        <HybridWebView x:Name="webView"
+                   Grid.Row="1" />
     </Grid>
 </ContentPage>
