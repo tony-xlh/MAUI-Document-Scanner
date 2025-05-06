@@ -56,6 +56,11 @@ namespace DWT_REST_MAUI
             InitializeComponent();
             webView.SetInvokeJavaScriptTarget(this);
             InitViewer();
+            RequestCameraPermission();
+        }
+
+        private async void RequestCameraPermission() {
+            PermissionStatus status = await Permissions.RequestAsync<Permissions.Camera>();
         }
 
         private async void InitViewer() {
