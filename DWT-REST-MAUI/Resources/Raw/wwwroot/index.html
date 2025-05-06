@@ -7,6 +7,8 @@
   <title>DDV - HelloWorld</title>
   <link rel="stylesheet" href="ddv/ddv.css">
   <script src="ddv/ddv.js"></script>
+  <script src="dcv/dynamsoft-capture-vision-bundle/dist/dcv.bundle.js"></script>
+  <script src="livescanning.js"></script>
 </head>
 <style>
   html,body {
@@ -27,6 +29,7 @@
   <div id="container"></div>
 </body>
 <script>
+  let groupUid = "uniqueGroupId";
   // call .net
   // Unified function to send messages to .NET
   function sendMessageToDotNet(message) {
@@ -85,15 +88,28 @@
     catch (error) {
       console.log(error);
     }
-
-    // Public trial license which is valid for 24 hours
-    // You can request a 30-day trial key from https://www.dynamsoft.com/customer/license/trialLicense/?product=mwc
-    Dynamsoft.DDV.Core.license = productkey ?? "DLS2eyJoYW5kc2hha2VDb2RlIjoiMTAwMjI3NzYzLVRYbFFjbTlxIiwibWFpblNlcnZlclVSTCI6Imh0dHBzOi8vbWx0cy5keW5hbXNvZnQuY29tIiwib3JnYW5pemF0aW9uSUQiOiIxMDAyMjc3NjMiLCJzdGFuZGJ5U2VydmVyVVJMIjoiaHR0cHM6Ly9zbHRzLmR5bmFtc29mdC5jb20iLCJjaGVja0NvZGUiOjE4OTc4MDUzNDV9";
+    Dynamsoft.Core.CoreModule.engineResourcePaths.rootDirectory = "dcv";
+    Dynamsoft.Core.CoreModule.engineResourcePaths = {
+      std: 'dcv/dynamsoft-capture-vision-std/dist',
+      dip: 'dcv/dynamsoft-image-processing/dist',
+      core: 'dcv/dynamsoft-core/dist',
+      license: 'dcv/dynamsoft-license/dist',
+      cvr: 'dcv/dynamsoft-capture-vision-router/dist',
+      dbr: 'dcv/dynamsoft-barcode-reader/dist',
+      dce: 'dcv/dynamsoft-camera-enhancer/dist',
+      dcp: 'dcv/dynamsoft-code-parser/dist',
+      dlr: 'dcv/dynamsoft-label-recognizer/dist',
+      ddn: 'dcv/dynamsoft-document-normalizer/dist',
+      utility: 'dcv/dynamsoft-utility/dist',
+      dlrData: 'dcv/dynamsoft-label-recognizer-data/dist',
+      dnn: 'dcv/dynamsoft-capture-vision-dnn/dist',
+    };
+    await Dynamsoft.License.LicenseManager.initLicense("DLS2eyJoYW5kc2hha2VDb2RlIjoiMTAwMjI3NzYzLVRYbFFjbTlxIiwibWFpblNlcnZlclVSTCI6Imh0dHBzOi8vbWx0cy5keW5hbXNvZnQuY29tIiwib3JnYW5pemF0aW9uSUQiOiIxMDAyMjc3NjMiLCJzdGFuZGJ5U2VydmVyVVJMIjoiaHR0cHM6Ly9zbHRzLmR5bmFtc29mdC5jb20iLCJjaGVja0NvZGUiOjE4OTc4MDUzNDV9",true);
+    await Dynamsoft.Core.CoreModule.loadWasm(["DDN"]);
     // Preload DDV Resource
     Dynamsoft.DDV.Core.loadWasm();
     await Dynamsoft.DDV.Core.init();
     Dynamsoft.DDV.setProcessingHandler("imageFilter", new Dynamsoft.DDV.ImageFilter());
-    let groupUid = "uniqueGroupId";
     const config = {
       type: Dynamsoft.DDV.Elements.Layout,
       flexDirection: "column",
@@ -140,11 +156,11 @@
       groupUid: groupUid,
       container: "container"
     });
-    editViewer.hide();
-    browseViewer.show();
     editViewer.on("back",() => {
       hideEditor();
     });
+    await initForLiveScanning();
+    switchViewer(0,0,0,1);
     // send back to .net
     const result = [{
       name: name,
@@ -152,14 +168,30 @@
     sendMessageToDotNet(JSON.stringify(result));
   }
 
-  function showEditor(){
+  // Define a function to control the viewers' visibility
+  function switchViewer(c,p,e,b) {
+    captureViewer.hide();
+    perspectiveViewer.hide();
+    editViewer.hide();
     browseViewer.hide();
-    editViewer.show();
+
+    if(c) {
+      captureViewer.show();
+    } else {
+      captureViewer.stop();
+    }
+          
+    if(p) perspectiveViewer.show();
+    if(e) editViewer.show();
+    if(b) browseViewer.show();
+  };
+
+  function showEditor(){
+    switchViewer(0,0,1,0);
   }
 
   function hideEditor(){
-    editViewer.hide();
-    browseViewer.show();
+    switchViewer(1,0,0,0);
   }
 
   function createNewDocument() {
