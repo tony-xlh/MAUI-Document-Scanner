@@ -8,5 +8,6 @@
             Text="Processing..."
             VerticalOptions="Center" 
             HorizontalOptions="Center" />
+        <Button Text="Cancel" Clicked="CancelButton_Clicked"></Button>
     </VerticalStackLayout>
 </ContentPage>

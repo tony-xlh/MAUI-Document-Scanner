@@ -9,7 +9,6 @@ namespace DWT_REST_MAUI
     public class HybridWebViewBridge : IWebViewBridge
     {
         private Microsoft.Maui.Controls.HybridWebView _webView;
-
         public HybridWebViewBridge(Microsoft.Maui.Controls.HybridWebView webView)
         {
             _webView = webView;
@@ -51,6 +50,7 @@ namespace DWT_REST_MAUI
     public partial class MainPage : ContentPage
     {
         private Dynamsoft.WebViewer.DocumentViewer _documentViewer;
+        private IScannerJobClient? scannerJob;
         public MainPage()
         {
             InitializeComponent();
@@ -103,10 +103,27 @@ namespace DWT_REST_MAUI
                 await _documentViewer.WebView.ExecuteJavaScriptAsync("startLiveScanning();");
             }
             else if (action == "Document Scanner") {
-                await Navigation.PushModalAsync(new ProgressPage());
+                var canceled = false;
+                Func<object> cancelEvent = () =>
+                {
+                    canceled = true;
+                    Navigation.PopModalAsync();
+                    CancelScanning();
+                    return "";
+                };
+                var page = new ProgressPage();
+                page.RegisterCallback(cancelEvent);
+                await Navigation.PushModalAsync(page);
                 await ScanDocument();
-                await Navigation.PopModalAsync();
+                if (!canceled) {
+                    await Navigation.PopModalAsync();
+                }
+                
             }
+        }
+
+        private void CancelScanning() {
+            scannerJob?.DeleteJob();
         }
 
         private async Task<bool> ScanDocument()
@@ -154,7 +171,8 @@ namespace DWT_REST_MAUI
                         }
                     }
                 }
-                await _documentViewer.ScanImageToView(options);
+                scannerJob = await _documentViewer.CreateScanToViewJob(options);
+                await _documentViewer.StartJob(scannerJob);
             }
             catch (Exception ex)
             {
