@@ -94,6 +94,20 @@ namespace DWT_REST_MAUI
             _documentViewer.ShowEditor();
         }
 
+        private async void OnSaveItemClicked(object sender, EventArgs args)
+        {
+            byte[] pdfContent = await _documentViewer.SaveAsPdf();
+            string targetFile = System.IO.Path.Combine(FileSystem.Current.AppDataDirectory, "out.pdf");
+            await using (var fileStream = new FileStream(targetFile, FileMode.Create, FileAccess.Write))
+            {
+                await fileStream.WriteAsync(pdfContent, 0, pdfContent.Length);
+                await Share.Default.RequestAsync(new ShareFileRequest
+                {
+                    Title = "Share PDF file",
+                    File = new ShareFile(targetFile)
+                });
+            }
+        }
 
         private async void OnScanItemClicked(object sender, EventArgs args)
         {

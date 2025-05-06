@@ -16,6 +16,10 @@
                      Order="Secondary" 
                      Clicked="OnSettingsItemClicked"
                      />
+        <ToolbarItem Text="Save as PDF"
+             Order="Secondary" 
+             Clicked="OnSaveItemClicked"
+             />
     </ContentPage.ToolbarItems>
     <Grid RowDefinitions="Auto,*"
           ColumnDefinitions="*">
