@@ -19,7 +19,7 @@
             <VerticalStackLayout Spacing="5">
                 <Label Text="IP Address:" FontAttributes="Bold"/>
                 <Entry Placeholder="Enter scanner IP address" 
-                       Keyboard="Numeric"
+                       Keyboard="Plain"
                        Text="{Binding IpAddress}"/>
             </VerticalStackLayout>
 
