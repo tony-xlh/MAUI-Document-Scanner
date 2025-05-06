@@ -135,6 +135,8 @@ namespace DWT_REST_MAUI
                 var colorMode = Preferences.Get("ColorMode", "Color");
                 var IPAddress = Preferences.Get("IP", "https://127.0.0.1:18623");
                 var scannerName = Preferences.Get("Scanner", "");
+                var autoFeeder = Preferences.Get("AutoFeeder", false);
+                var duplex = Preferences.Get("Duplex", false);
                 var client = new DWTClient(new Uri(IPAddress), license);
                 _documentViewer.UpdateRESRClient(client);
                 CreateScanJobOptions options = new CreateScanJobOptions();
@@ -142,8 +144,8 @@ namespace DWT_REST_MAUI
                 options.RequireWebsocket = false;
                 options.Config = new ScannerConfiguration();
                 options.Config.XferCount = 7;
-                options.Config.IfFeederEnabled = false;
-                options.Config.IfDuplexEnabled = false;
+                options.Config.IfFeederEnabled = autoFeeder;
+                options.Config.IfDuplexEnabled = duplex;
                 Debug.WriteLine(colorMode);
                 if (colorMode == "Color")
                 {

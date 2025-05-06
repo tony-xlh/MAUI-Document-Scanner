@@ -63,6 +63,12 @@
                              IsChecked="{Binding IsColor}"/>
             </VerticalStackLayout>
 
+            <Label Text="Auto Feeder" FontAttributes="Bold"></Label>
+            <CheckBox IsChecked="{Binding AutoFeeder}"></CheckBox>
+
+            <Label Text="Duplex" FontAttributes="Bold"></Label>
+            <CheckBox IsChecked="{Binding Duplex}"></CheckBox>
+            
             <!-- Save Button -->
             <Button Text="Save Settings" 
                     HorizontalOptions="Center"

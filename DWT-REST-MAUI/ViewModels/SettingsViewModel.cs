@@ -13,6 +13,34 @@ namespace DWT_REST_MAUI.ViewModels;
 
 internal class SettingsViewModel : INotifyPropertyChanged
 {
+    // Auto feeder
+    private bool _autoFeeder;
+    public bool AutoFeeder
+    {
+        get => _autoFeeder;
+        set
+        {
+            if (_autoFeeder != value)
+            {
+                _autoFeeder = value;
+                OnPropertyChanged();
+            }
+        }
+    }
+    // Auto feeder
+    private bool _duplex;
+    public bool Duplex
+    {
+        get => _duplex;
+        set
+        {
+            if (_duplex != value)
+            {
+                _duplex = value;
+                OnPropertyChanged();
+            }
+        }
+    }
     // License Key
     private string _licenseKey;
     public string LicenseKey
@@ -177,6 +205,8 @@ internal class SettingsViewModel : INotifyPropertyChanged
     public void LoadPreferences() {
         LicenseKey = Preferences.Get("License", "");
         IpAddress = Preferences.Get("IP", "https://192.168.8.65:18623");
+        Duplex = Preferences.Get("Duplex", false);
+        AutoFeeder = Preferences.Get("AutoFeeder", false);
         int DPI = Preferences.Get("DPI",150);
         if (DPI == 150) {
             Is150Dpi = true;
@@ -239,6 +269,8 @@ internal class SettingsViewModel : INotifyPropertyChanged
         Preferences.Set("IP", IpAddress);
         Preferences.Set("Scanner", SelectedScannerModel);
         Preferences.Set("DPI", SelectedDpi);
+        Preferences.Set("AutoFeeder", AutoFeeder);
+        Preferences.Set("Duplex", Duplex);
         Preferences.Set("ColorMode", SelectedColorMode);
         Shell.Current.GoToAsync("../");
         // In a real app, you might want to:
