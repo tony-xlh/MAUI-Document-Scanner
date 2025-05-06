@@ -96,6 +96,19 @@ namespace DWT_REST_MAUI
 
         private async void OnScanItemClicked(object sender, EventArgs args)
         {
+            string action = await DisplayActionSheet("ActionSheet: Select the source", "Cancel", null , "Document Scanner", "Camera");
+            if (action == "Camera")
+            {
+                await _documentViewer.WebView.ExecuteJavaScriptAsync("startLiveScanning();");
+            }
+            else if (action == "Document Scanner") {
+                ScanDocument();
+            }
+                
+        }
+
+        private async void ScanDocument()
+        {
             try
             {
                 var license = Preferences.Get("License", "");
