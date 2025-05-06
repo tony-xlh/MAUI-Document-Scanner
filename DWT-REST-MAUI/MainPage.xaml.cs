@@ -2,6 +2,7 @@
 using Dynamsoft.WebViewer;
 using Microsoft.Maui.Controls;
 using System.Diagnostics;
+using System.Runtime.CompilerServices;
 
 namespace DWT_REST_MAUI
 {
@@ -102,12 +103,13 @@ namespace DWT_REST_MAUI
                 await _documentViewer.WebView.ExecuteJavaScriptAsync("startLiveScanning();");
             }
             else if (action == "Document Scanner") {
-                ScanDocument();
+                await Navigation.PushModalAsync(new ProgressPage());
+                await ScanDocument();
+                await Navigation.PopModalAsync();
             }
-                
         }
 
-        private async void ScanDocument()
+        private async Task<bool> ScanDocument()
         {
             try
             {
@@ -158,6 +160,7 @@ namespace DWT_REST_MAUI
             {
                 Debug.WriteLine(ex.Message);
             }
+            return true;
         }
     }
 
