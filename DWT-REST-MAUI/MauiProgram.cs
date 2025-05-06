@@ -9,6 +9,12 @@ namespace DWT_REST_MAUI
             var builder = MauiApp.CreateBuilder();
             builder
                 .UseMauiApp<App>()
+                .ConfigureMauiHandlers(handlers =>
+                {
+                #if ANDROID
+                    handlers.AddHandler<HybridWebView, Platforms.Android.MyHybridWebViewHandler>();
+                #endif
+                })
                 .ConfigureFonts(fonts =>
                 {
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
