@@ -16,7 +16,8 @@ namespace DWT_REST_MAUI
                 });
 
 #if DEBUG
-    		builder.Logging.AddDebug();
+            builder.Services.AddHybridWebViewDeveloperTools();
+            builder.Logging.AddDebug();
 #endif
 
             return builder.Build();
