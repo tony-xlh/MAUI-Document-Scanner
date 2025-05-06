@@ -142,8 +142,8 @@ namespace DWT_REST_MAUI
                 options.RequireWebsocket = false;
                 options.Config = new ScannerConfiguration();
                 options.Config.XferCount = 7;
-                options.Config.IfFeederEnabled = true;
-                options.Config.IfDuplexEnabled = true;
+                options.Config.IfFeederEnabled = false;
+                options.Config.IfDuplexEnabled = false;
                 Debug.WriteLine(colorMode);
                 if (colorMode == "Color")
                 {
@@ -162,7 +162,7 @@ namespace DWT_REST_MAUI
                 }
                 if (!string.IsNullOrEmpty(scannerName))
                 {
-                    var scanners = await _documentViewer.DWTClient.ScannerControlClient.Manager.Get(EnumDeviceTypeMask.DT_TWAINSCANNER);
+                    var scanners = await _documentViewer.DWTClient.ScannerControlClient.Manager.Get(EnumDeviceTypeMask.DT_TWAINSCANNER | EnumDeviceTypeMask.DT_WIATWAINSCANNER);
                     foreach (var scanner in scanners)
                     {
                         if (scanner.Name == scannerName)
