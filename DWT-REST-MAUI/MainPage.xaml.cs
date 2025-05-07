@@ -82,7 +82,10 @@ namespace DWT_REST_MAUI
                 object name = "";
                 jsonObject.TryGetValue("name",out name);
                 if ((string) name == "loadFile") {
-                    PickAndShow();
+                    MainThread.BeginInvokeOnMainThread(() =>
+                    {
+                        PickAndShow();
+                    });
                 }
                 return true;
             };
@@ -148,6 +151,11 @@ namespace DWT_REST_MAUI
             _documentViewer.ShowEditor();
         }
 
+        private void OnOpenFileItemClicked(object sender, EventArgs args)
+        {
+            PickAndShow();
+        }
+        
         private async void OnSaveItemClicked(object sender, EventArgs args)
         {
             byte[] pdfContent = await _documentViewer.SaveAsPdf();

@@ -20,6 +20,10 @@
              Order="Secondary" 
              Clicked="OnSaveItemClicked"
              />
+        <ToolbarItem Text="Open local file"
+             Order="Secondary" 
+             Clicked="OnOpenFileItemClicked"
+             />
     </ContentPage.ToolbarItems>
     <Grid RowDefinitions="Auto,*"
       ColumnDefinitions="*">
