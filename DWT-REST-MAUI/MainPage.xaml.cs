@@ -214,6 +214,9 @@ namespace DWT_REST_MAUI
             try
             {
                 var license = Preferences.Get("License", productKey);
+                if (license == "") {
+                    license = productKey;
+                }
                 var DPI = Preferences.Get("DPI", 150);
                 var colorMode = Preferences.Get("ColorMode", "Color");
                 var IPAddress = Preferences.Get("IP", "https://127.0.0.1:18623");
