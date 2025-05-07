@@ -25,7 +25,7 @@
   }
 
   #container {
-    position: fixed;
+    position: fixed;    
     left: 0;
     top: 0;
     width: 100%;
@@ -149,7 +149,15 @@
             Dynamsoft.DDV.Elements.Filter,
             Dynamsoft.DDV.Elements.Undo,
             Dynamsoft.DDV.Elements.Delete,
-            Dynamsoft.DDV.Elements.Load,
+            {   
+                // Bind event for "PerspectiveAll" button to show the edit viewer
+                // The event will be registered later.
+                type: Dynamsoft.DDV.Elements.Button,
+                className: "ddv-load-image",
+                events:{
+                    click: "loadFile"
+                }
+            },
           ],
         },
       ],
@@ -166,6 +174,12 @@
     editViewer.hide();
     editViewer.on("back",() => {
       hideEditor();
+    });
+    editViewer.on("loadFile",() => {
+      const message = {
+        name: 'loadFile'
+      }
+        sendMessageToDotNet(JSON.stringify([message, "true"]));
     });
     await initForLiveScanning();
     switchViewer(0,0,0,1);

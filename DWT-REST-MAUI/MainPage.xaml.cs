@@ -70,12 +70,23 @@ namespace DWT_REST_MAUI
             options.ProductKey = "DLS2eyJoYW5kc2hha2VDb2RlIjoiMTAwMjI3NzYzLVRYbFFjbTlxIiwibWFpblNlcnZlclVSTCI6Imh0dHBzOi8vbWx0cy5keW5hbXNvZnQuY29tIiwib3JnYW5pemF0aW9uSUQiOiIxMDAyMjc3NjMiLCJzdGFuZGJ5U2VydmVyVVJMIjoiaHR0cHM6Ly9zbHRzLmR5bmFtc29mdC5jb20iLCJjaGVja0NvZGUiOjE4OTc4MDUzNDV9";
             options.SiteUrl = "index.html";
             options.MessageType = "__RawMessage";
+            var bridge = new HybridWebViewBridge(webView);
             _documentViewer = new Dynamsoft.WebViewer.DocumentViewer(options,
-                new HybridWebViewBridge(webView),
+                bridge,
                 new Uri("http://127.0.0.1:18622"));
 
             await _documentViewer.EnsureInitializedAsync();
-
+            Func<object,string,bool> callback = (o,s) =>
+            {
+                JsonObject jsonObject = (JsonObject)o;
+                object name = "";
+                jsonObject.TryGetValue("name",out name);
+                if ((string) name == "loadFile") {
+                    PickAndShow();
+                }
+                return true;
+            };
+            bridge.RegisterCallback(callback); 
             _documentViewer.DocumentSaved += (sender, args) =>
             {
                 try
@@ -88,6 +99,44 @@ namespace DWT_REST_MAUI
                     Debug.WriteLine(ex.Message);
                 }
             };
+        }
+
+        public async void PickAndShow()
+        {
+            try
+            {
+                PickOptions options = new()
+                {
+                    PickerTitle = "Please select a PDF/image file"
+                };
+                var result = await FilePicker.Default.PickAsync(options);
+                if (result != null)
+                {
+                    if (result.FileName.EndsWith("pdf", StringComparison.OrdinalIgnoreCase) || 
+                        result.FileName.EndsWith("jpg", StringComparison.OrdinalIgnoreCase) ||
+                        result.FileName.EndsWith("png", StringComparison.OrdinalIgnoreCase))
+                    {
+                        using var stream = await result.OpenReadAsync();
+                        var bytes = await StreamToBytesAsync(stream);
+                        await webView.EvaluateJavaScriptAsync($"loadImage('{Convert.ToBase64String(bytes)}');");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                // The user canceled or something went wrong
+            }
+        }
+
+        public static async Task<byte[]> StreamToBytesAsync(Stream stream)
+        {
+            if (stream == null) return null;
+
+            using (var memoryStream = new MemoryStream())
+            {
+                await stream.CopyToAsync(memoryStream);
+                return memoryStream.ToArray();
+            }
         }
 
         private async void OnSettingsItemClicked(object sender, EventArgs args) {
