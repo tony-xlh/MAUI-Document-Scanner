@@ -51,6 +51,7 @@ namespace DWT_REST_MAUI
     {
         private Dynamsoft.WebViewer.DocumentViewer _documentViewer;
         private IScannerJobClient? scannerJob;
+        private string productKey = "DLS2eyJoYW5kc2hha2VDb2RlIjoiMTAwMjI3NzYzLVRYbFFjbTlxIiwibWFpblNlcnZlclVSTCI6Imh0dHBzOi8vbWx0cy5keW5hbXNvZnQuY29tIiwib3JnYW5pemF0aW9uSUQiOiIxMDAyMjc3NjMiLCJzdGFuZGJ5U2VydmVyVVJMIjoiaHR0cHM6Ly9zbHRzLmR5bmFtc29mdC5jb20iLCJjaGVja0NvZGUiOjE4OTc4MDUzNDV9";
         public MainPage()
         {
             InitializeComponent();
@@ -67,7 +68,7 @@ namespace DWT_REST_MAUI
             DocumentViewerOptions options = new DocumentViewerOptions();
             // because we load ddv page in the service, so we should make sure the service is running, so we need to set a long timeout
             // or manual create a websocket connection in js, recommend this way.
-            options.ProductKey = "DLS2eyJoYW5kc2hha2VDb2RlIjoiMTAwMjI3NzYzLVRYbFFjbTlxIiwibWFpblNlcnZlclVSTCI6Imh0dHBzOi8vbWx0cy5keW5hbXNvZnQuY29tIiwib3JnYW5pemF0aW9uSUQiOiIxMDAyMjc3NjMiLCJzdGFuZGJ5U2VydmVyVVJMIjoiaHR0cHM6Ly9zbHRzLmR5bmFtc29mdC5jb20iLCJjaGVja0NvZGUiOjE4OTc4MDUzNDV9";
+            options.ProductKey = productKey;
             options.SiteUrl = "index.html";
             options.MessageType = "__RawMessage";
             var bridge = new HybridWebViewBridge(webView);
@@ -206,7 +207,7 @@ namespace DWT_REST_MAUI
         {
             try
             {
-                var license = Preferences.Get("License", "");
+                var license = Preferences.Get("License", productKey);
                 var DPI = Preferences.Get("DPI", 150);
                 var colorMode = Preferences.Get("ColorMode", "Color");
                 var IPAddress = Preferences.Get("IP", "https://127.0.0.1:18623");
