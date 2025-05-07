@@ -12,21 +12,38 @@ EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
+		Debug|ARM64 = Debug|ARM64
 		Release|Any CPU = Release|Any CPU
+		Release|ARM64 = Release|ARM64
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{2062BCA1-BA4B-484F-8370-5A05B7A7CC0B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{2062BCA1-BA4B-484F-8370-5A05B7A7CC0B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2062BCA1-BA4B-484F-8370-5A05B7A7CC0B}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{2062BCA1-BA4B-484F-8370-5A05B7A7CC0B}.Debug|ARM64.ActiveCfg = Release|ARM64
+		{2062BCA1-BA4B-484F-8370-5A05B7A7CC0B}.Debug|ARM64.Build.0 = Release|ARM64
+		{2062BCA1-BA4B-484F-8370-5A05B7A7CC0B}.Debug|ARM64.Deploy.0 = Release|ARM64
 		{2062BCA1-BA4B-484F-8370-5A05B7A7CC0B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2062BCA1-BA4B-484F-8370-5A05B7A7CC0B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2062BCA1-BA4B-484F-8370-5A05B7A7CC0B}.Release|ARM64.ActiveCfg = Release|ARM64
+		{2062BCA1-BA4B-484F-8370-5A05B7A7CC0B}.Release|ARM64.Build.0 = Release|ARM64
+		{2062BCA1-BA4B-484F-8370-5A05B7A7CC0B}.Release|ARM64.Deploy.0 = Release|ARM64
 		{18C30D5D-6FEC-DC5C-0416-6F52441C0375}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{18C30D5D-6FEC-DC5C-0416-6F52441C0375}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{18C30D5D-6FEC-DC5C-0416-6F52441C0375}.Debug|ARM64.ActiveCfg = Debug|Any CPU
+		{18C30D5D-6FEC-DC5C-0416-6F52441C0375}.Debug|ARM64.Build.0 = Debug|Any CPU
 		{18C30D5D-6FEC-DC5C-0416-6F52441C0375}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{18C30D5D-6FEC-DC5C-0416-6F52441C0375}.Release|Any CPU.Build.0 = Release|Any CPU
+		{18C30D5D-6FEC-DC5C-0416-6F52441C0375}.Release|ARM64.ActiveCfg = Release|Any CPU
+		{18C30D5D-6FEC-DC5C-0416-6F52441C0375}.Release|ARM64.Build.0 = Release|Any CPU
 		{032CDF15-27C7-DD79-5488-361F7E36DA28}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{032CDF15-27C7-DD79-5488-361F7E36DA28}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{032CDF15-27C7-DD79-5488-361F7E36DA28}.Debug|ARM64.ActiveCfg = Debug|Any CPU
+		{032CDF15-27C7-DD79-5488-361F7E36DA28}.Debug|ARM64.Build.0 = Debug|Any CPU
 		{032CDF15-27C7-DD79-5488-361F7E36DA28}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{032CDF15-27C7-DD79-5488-361F7E36DA28}.Release|Any CPU.Build.0 = Release|Any CPU
+		{032CDF15-27C7-DD79-5488-361F7E36DA28}.Release|ARM64.ActiveCfg = Release|Any CPU
+		{032CDF15-27C7-DD79-5488-361F7E36DA28}.Release|ARM64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
