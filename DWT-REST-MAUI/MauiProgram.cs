@@ -11,9 +11,12 @@ namespace DWT_REST_MAUI
                 .UseMauiApp<App>()
                 .ConfigureMauiHandlers(handlers =>
                 {
-                #if ANDROID
+#if ANDROID
                     handlers.AddHandler<HybridWebView, Platforms.Android.MyHybridWebViewHandler>();
-                #endif
+#endif
+#if IOS
+                    handlers.AddHandler<HybridWebView, Platforms.iOS.MyHybridWebViewHandler>();
+#endif
                 })
                 .ConfigureFonts(fonts =>
                 {
