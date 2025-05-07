@@ -101,6 +101,12 @@ namespace DWT_REST_MAUI
                 catch (Exception ex)
                 {
                     Debug.WriteLine(ex.Message);
+                    if (ex.Message != null) {
+                        MainThread.BeginInvokeOnMainThread(async () =>
+                        {
+                            await DisplayAlert("Alert", ex.Message, "OK");
+                        });
+                    }
                 }
             };
         }
@@ -256,6 +262,13 @@ namespace DWT_REST_MAUI
             catch (Exception ex)
             {
                 Debug.WriteLine(ex.Message);
+                if (ex.Message != null)
+                {
+                    MainThread.BeginInvokeOnMainThread(async () =>
+                    {
+                        await DisplayAlert("Alert", ex.Message, "OK");
+                    });
+                }
             }
             return true;
         }
