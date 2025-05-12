@@ -204,18 +204,32 @@ namespace DWT_REST_MAUI
             }
         }
 
-        private async void SaveFile() {  
-            byte[] pdfContent = await _documentViewer.SaveAsPdf();
-            string targetFile = System.IO.Path.Combine(FileSystem.Current.AppDataDirectory, "out.pdf");
-            await using (var fileStream = new FileStream(targetFile, FileMode.Create, FileAccess.Write))
+        private async void SaveFile() {
+            try
             {
-                await fileStream.WriteAsync(pdfContent, 0, pdfContent.Length);
-                await Share.Default.RequestAsync(new ShareFileRequest
+                byte[] pdfContent = await _documentViewer.SaveAsPdf();
+                string targetFile = System.IO.Path.Combine(FileSystem.Current.AppDataDirectory, "out.pdf");
+                await using (var fileStream = new FileStream(targetFile, FileMode.Create, FileAccess.Write))
                 {
-                    Title = "Share PDF file",
-                    File = new ShareFile(targetFile)
-                });
+                    await fileStream.WriteAsync(pdfContent, 0, pdfContent.Length);
+                    await Share.Default.RequestAsync(new ShareFileRequest
+                    {
+                        Title = "Share PDF file",
+                        File = new ShareFile(targetFile)
+                    });
+                }
             }
+            catch (Exception ex)
+            {
+                if (ex.Message != null)
+                {
+                    MainThread.BeginInvokeOnMainThread(async () =>
+                    {
+                        await DisplayAlert("Alert", ex.Message, "OK");
+                    });
+                }
+            }
+
         }
 
         private void CancelScanning() {
