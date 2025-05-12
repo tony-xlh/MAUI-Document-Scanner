@@ -134,7 +134,7 @@ namespace DWT_REST_MAUI
             }
             catch (Exception ex)
             {
-                // The user canceled or something went wrong
+                Debug.WriteLine(ex.Message);
             }
         }
 
