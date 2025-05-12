@@ -30,5 +30,7 @@
 	<string>Assets.xcassets/appicon.appiconset</string>
 	<key>NSCameraUsageDescription</key>
 	<string>For document scanning</string>
+	<key>CFBundleIdentifier</key>
+	<string>com.tonyxlh.maui-sample</string>
 </dict>
 </plist>
