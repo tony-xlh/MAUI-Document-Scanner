@@ -204,7 +204,7 @@ namespace DWT_REST_MAUI
             }
         }
 
-        private async void SaveFile() {
+        private async void SaveFile() {  
             byte[] pdfContent = await _documentViewer.SaveAsPdf();
             string targetFile = System.IO.Path.Combine(FileSystem.Current.AppDataDirectory, "out.pdf");
             await using (var fileStream = new FileStream(targetFile, FileMode.Create, FileAccess.Write))

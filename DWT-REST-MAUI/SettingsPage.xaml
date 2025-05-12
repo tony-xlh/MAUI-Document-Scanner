@@ -5,6 +5,12 @@
              xmlns:viewModels="clr-namespace:DWT_REST_MAUI.ViewModels"
              x:DataType="viewModels:SettingsViewModel"
              Title="Settings">
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Save"
+                 Order="Primary"
+                 Command="{Binding SaveSettingsCommand}"
+                 />
+    </ContentPage.ToolbarItems>
     <ScrollView>
         <VerticalStackLayout Spacing="20" Padding="30">
 
