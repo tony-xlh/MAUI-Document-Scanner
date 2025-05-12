@@ -4,26 +4,10 @@
              x:Class="DWT_REST_MAUI.MainPage"
              Title="Document Scanner">
     <ContentPage.ToolbarItems>
-        <ToolbarItem Text="Scan"
-                     Order="Secondary"
-                     Clicked="OnScanItemClicked"
+        <ToolbarItem Text="Action"
+                     Order="Primary"
+                     Clicked="OnActionItemClicked"
                      />
-        <ToolbarItem Text="Edit"
-                     Order="Secondary" 
-                     Clicked="OnEditItemClicked"
-                     />
-        <ToolbarItem Text="Settings"
-                     Order="Secondary" 
-                     Clicked="OnSettingsItemClicked"
-                     />
-        <ToolbarItem Text="Save as PDF"
-             Order="Secondary" 
-             Clicked="OnSaveItemClicked"
-             />
-        <ToolbarItem Text="Open local file"
-             Order="Secondary" 
-             Clicked="OnOpenFileItemClicked"
-             />
     </ContentPage.ToolbarItems>
     <Grid RowDefinitions="Auto,*"
       ColumnDefinitions="*">

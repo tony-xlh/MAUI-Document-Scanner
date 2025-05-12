@@ -149,43 +149,41 @@ namespace DWT_REST_MAUI
             }
         }
 
-        private async void OnSettingsItemClicked(object sender, EventArgs args) {
-            await Shell.Current.GoToAsync("SettingsPage");
-        }
-
-        private void OnEditItemClicked(object sender, EventArgs args)
+        private async void OnActionItemClicked(object sender, EventArgs args)
         {
-            _documentViewer.ShowEditor();
-        }
-
-        private void OnOpenFileItemClicked(object sender, EventArgs args)
-        {
-            PickAndShow();
-        }
-        
-        private async void OnSaveItemClicked(object sender, EventArgs args)
-        {
-            byte[] pdfContent = await _documentViewer.SaveAsPdf();
-            string targetFile = System.IO.Path.Combine(FileSystem.Current.AppDataDirectory, "out.pdf");
-            await using (var fileStream = new FileStream(targetFile, FileMode.Create, FileAccess.Write))
+            string result = await DisplayActionSheet("Select an action","Cancel",null,"Scan with scanner", "Scan with camera", "Edit","Settings","Save as PDF","Open a local file");
+            if (result == "Scan with scanner")
             {
-                await fileStream.WriteAsync(pdfContent, 0, pdfContent.Length);
-                await Share.Default.RequestAsync(new ShareFileRequest
-                {
-                    Title = "Share PDF file",
-                    File = new ShareFile(targetFile)
-                });
+                StartScanning("Document Scanner");
+            }
+            else if (result == "Scan with camera")
+            {
+                StartScanning("Camera");
+            }
+            else if (result == "Edit")
+            {
+                _documentViewer.ShowEditor();
+            }
+            else if (result == "Settings") {
+                await Shell.Current.GoToAsync("SettingsPage");
+            }
+            else if (result == "Save as PDF")
+            {
+                SaveFile();
+            }
+            else if (result == "Open a local file")
+            {
+                PickAndShow();
             }
         }
 
-        private async void OnScanItemClicked(object sender, EventArgs args)
-        {
-            string action = await DisplayActionSheet("ActionSheet: Select the source", "Cancel", null , "Document Scanner", "Camera");
+        private async void StartScanning(string action) {
             if (action == "Camera")
             {
                 await _documentViewer.WebView.ExecuteJavaScriptAsync("startLiveScanning();");
             }
-            else if (action == "Document Scanner") {
+            else if (action == "Document Scanner")
+            {
                 var canceled = false;
                 Func<object> cancelEvent = () =>
                 {
@@ -198,10 +196,25 @@ namespace DWT_REST_MAUI
                 page.RegisterCallback(cancelEvent);
                 await Navigation.PushModalAsync(page);
                 await ScanDocument();
-                if (!canceled) {
+                if (!canceled)
+                {
                     await Navigation.PopModalAsync();
                 }
-                
+
+            }
+        }
+
+        private async void SaveFile() {
+            byte[] pdfContent = await _documentViewer.SaveAsPdf();
+            string targetFile = System.IO.Path.Combine(FileSystem.Current.AppDataDirectory, "out.pdf");
+            await using (var fileStream = new FileStream(targetFile, FileMode.Create, FileAccess.Write))
+            {
+                await fileStream.WriteAsync(pdfContent, 0, pdfContent.Length);
+                await Share.Default.RequestAsync(new ShareFileRequest
+                {
+                    Title = "Share PDF file",
+                    File = new ShareFile(targetFile)
+                });
             }
         }
 
