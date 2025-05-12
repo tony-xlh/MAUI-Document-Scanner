@@ -64,10 +64,10 @@
             </VerticalStackLayout>
 
             <Label Text="Auto Feeder" FontAttributes="Bold"></Label>
-            <CheckBox IsChecked="{Binding AutoFeeder}"></CheckBox>
+            <CheckBox IsChecked="{Binding AutoFeeder}" HorizontalOptions="Start"></CheckBox>
 
             <Label Text="Duplex" FontAttributes="Bold"></Label>
-            <CheckBox IsChecked="{Binding Duplex}"></CheckBox>
+            <CheckBox IsChecked="{Binding Duplex}" HorizontalOptions="Start"></CheckBox>
             
             <!-- Save Button -->
             <Button Text="Save Settings" 
