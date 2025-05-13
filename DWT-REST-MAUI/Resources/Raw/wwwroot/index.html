@@ -9,6 +9,7 @@
   <script src="ddv/ddv.js"></script>
   <script src="dcv/dynamsoft-capture-vision-bundle/dist/dcv.bundle.js"></script>
   <script src="livescanning.js"></script>
+  <script src="util.js"></script>
 </head>
 <style>
   html,body {
@@ -37,49 +38,6 @@
 </body>
 <script>
   let groupUid = "uniqueGroupId";
-  // call .net
-  // Unified function to send messages to .NET
-  function sendMessageToDotNet(message) {
-    try { 
-      message = (messageType === '') ? message : `${messageType}|${message}`;
-      if (window.chrome && window.chrome.webview) {
-        // For WinForms and WPF (WebView2)
-        window.chrome.webview.postMessage(message);
-      }
-      else if (window.DotNet) {
-        // For Blazor, not sure if this is the right way
-        DotNet.invokeMethodAsync(blazorAppName, blazorCallbackName, message);
-      }
-      else if (window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.webwindowinterop) {
-        // iOS and MacCatalyst WKWebView
-        window.webkit.messageHandlers.webwindowinterop.postMessage(message);
-      }
-      else if (hybridWebViewHost){
-        // Android WebView
-        hybridWebViewHost.sendMessage(message);
-      }
-      else {
-        console.error("Unsupported platform or WebView environment.");
-      }
-    }
-    catch (error) {
-      console.error("Error sending message to .NET:", error);
-    }
-  };
-
-  window.addEventListener("load", function () {
-    const message = {
-      name: 'load'
-    }
-    messageType = '__RawMessage';
-    console.log(message);
-    sendMessageToDotNet(JSON.stringify([message, "true"]));
-  });
-  // call .net
-
-  // call from .net
-  var productkey;
-  var messageType;
   let editViewer;
   let browseViewer;
   async function initView(options) {

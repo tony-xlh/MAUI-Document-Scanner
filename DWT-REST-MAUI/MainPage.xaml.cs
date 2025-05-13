@@ -9,6 +9,7 @@ namespace DWT_REST_MAUI
     public class HybridWebViewBridge : IWebViewBridge
     {
         private Microsoft.Maui.Controls.HybridWebView _webView;
+
         public HybridWebViewBridge(Microsoft.Maui.Controls.HybridWebView webView)
         {
             _webView = webView;
@@ -25,15 +26,11 @@ namespace DWT_REST_MAUI
             return result;
         }
 
-        public void RegisterCallback(Func<object, string, bool> callback)
+        public void RegisterCallback(Func<string, bool> callback)
         {
             _webView.RawMessageReceived += (sender, args) =>
             {
-                // Parse the message and invoke the callback
-                DynamicWebTWAIN.RestClient.JsonObject jsonObject;
-                string content;
-                Dynamsoft.WebViewer.DocumentViewer.ParseJavascriptResult(args.Message, out jsonObject, out content);
-                callback?.Invoke(jsonObject, content);
+                callback?.Invoke(args.Message);
             };
         }
 
@@ -77,12 +74,9 @@ namespace DWT_REST_MAUI
                 new Uri("http://127.0.0.1:18622"));
 
             await _documentViewer.EnsureInitializedAsync();
-            Func<object,string,bool> callback = (o,s) =>
+            Func<string,bool> callback = (name) =>
             {
-                JsonObject jsonObject = (JsonObject)o;
-                object name = "";
-                jsonObject.TryGetValue("name",out name);
-                if ((string) name == "loadFile") {
+                if (name == "loadFile") {
                     MainThread.BeginInvokeOnMainThread(() =>
                     {
                         PickAndShow();
@@ -162,7 +156,7 @@ namespace DWT_REST_MAUI
             }
             else if (result == "Edit")
             {
-                _documentViewer.ShowEditor();
+                await _documentViewer.WebView.ExecuteJavaScriptAsync("showEditor();");
             }
             else if (result == "Settings") {
                 await Shell.Current.GoToAsync("SettingsPage");
@@ -207,7 +201,10 @@ namespace DWT_REST_MAUI
         private async void SaveFile() {
             try
             {
-                byte[] pdfContent = await _documentViewer.SaveAsPdf();
+                PageOption pageOption = PageOption.All; // Default to "Save Current Page"
+                PdfPageType pdfPageType = PdfPageType.PageDefault;
+                SaveAnnotationMode annotationMode = SaveAnnotationMode.None;
+                byte[] pdfContent = await _documentViewer.SaveAsPdf(pageOption,pdfPageType,annotationMode,"");
                 string targetFile = System.IO.Path.Combine(FileSystem.Current.AppDataDirectory, "out.pdf");
                 await using (var fileStream = new FileStream(targetFile, FileMode.Create, FileAccess.Write))
                 {
@@ -251,7 +248,7 @@ namespace DWT_REST_MAUI
                 var autoFeeder = Preferences.Get("AutoFeeder", false);
                 var duplex = Preferences.Get("Duplex", false);
                 var client = new DWTClient(new Uri(IPAddress), license);
-                _documentViewer.UpdateRESRClient(client);
+                _documentViewer.DWTClient = client;
                 CreateScanJobOptions options = new CreateScanJobOptions();
                 options.AutoRun = false;
                 options.RequireWebsocket = false;
@@ -277,7 +274,7 @@ namespace DWT_REST_MAUI
                 }
                 if (!string.IsNullOrEmpty(scannerName))
                 {
-                    var scanners = await _documentViewer.DWTClient.ScannerControlClient.Manager.Get(EnumDeviceTypeMask.DT_TWAINSCANNER | EnumDeviceTypeMask.DT_WIATWAINSCANNER);
+                    var scanners = await _documentViewer.DWTClient.ScannerControlClient.ScannerManager.GetScanners(EnumDeviceTypeMask.DT_TWAINSCANNER | EnumDeviceTypeMask.DT_WIATWAINSCANNER);
                     foreach (var scanner in scanners)
                     {
                         if (scanner.Name == scannerName)

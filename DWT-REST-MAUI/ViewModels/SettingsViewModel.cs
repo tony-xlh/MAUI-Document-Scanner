@@ -238,7 +238,7 @@ internal class SettingsViewModel : INotifyPropertyChanged
         {
             List<string> modelNames = new List<string>(); 
             var client = new DWTClient(new Uri(IpAddress), LicenseKey);
-            var scanners = await client.ScannerControlClient.Manager.Get(EnumDeviceTypeMask.DT_WIATWAINSCANNER | EnumDeviceTypeMask.DT_TWAINSCANNER);
+            var scanners = await client.ScannerControlClient.ScannerManager.GetScanners(EnumDeviceTypeMask.DT_WIATWAINSCANNER | EnumDeviceTypeMask.DT_TWAINSCANNER);
             foreach (var scanner in scanners)
             {
                 Debug.WriteLine(scanner.Name);
