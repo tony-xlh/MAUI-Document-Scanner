@@ -44,11 +44,10 @@
     console.log(options);
     let name = '';
     try {
-      const op = JSON.parse(options);
-      console.log(op.productKey);
-      productkey = op.productKey;
-      name = op.name;
-      messageType = op.messageType;
+      console.log(options.productKey);
+      productkey = options.productKey;
+      name = options.name;
+      messageType = options.messageType;
     }
     catch (error) {
       console.log(error);
@@ -141,11 +140,7 @@
     });
     await initForLiveScanning();
     switchViewer(0,0,0,1);
-    // send back to .net
-    const result = [{
-      name: name,
-    }, location.origin]
-    sendMessageToDotNet(JSON.stringify(result));
+
   }
 
   // Define a function to control the viewers' visibility
@@ -212,140 +207,6 @@
     }
   }
 
-  async function loadDocument(url, callback) {
-    console.log(url);
-    
-    try {
-      const response = await fetch(url, {
-        method: "GET"
-      });
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      const image = await response.arrayBuffer();
-      if (editViewer) {
-        let doc = makesureDocOpened();
-        await doc.loadSource(new Blob([image], { type: response.headers.get("content-type") }));
-      }
-    } catch (error) {
-      console.error('Error loading document:', error);
-    } finally {
-      // send back to .net
-      sendMessageToDotNet(callback);
-    }
-  }
 
-  function stringToBase64(str) {
-    return btoa(unescape(encodeURIComponent(str)));
-  };
-
-  async function fileToBase64 (file) {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onload = () => resolve(reader.result.split(',')[1]); // Extract Base64 part
-      reader.onerror = (error) => reject(error);
-      reader.readAsDataURL(file);
-    });
-    };
-
-  async function onClickSaveToPdf() {
-    const result = await savetopdfInner();
-    result[0].name = onClickSaveToPdf.name; // call from js, so the name is the function name
-    sendMessageToDotNet(JSON.stringify(result));
-  }
-
-  async function saveToPdf(name) {
-    const result = await savetopdfInner();
-    result[0].name = name; // call from .net, the name is the different for .net code to receive result
-    sendMessageToDotNet(JSON.stringify(result));
-  }
-
-  async function savetopdfInner() {
-    let message = {
-      name: ''
-    };
-    let result = "";
-    try {
-      let response = await saveAsPdf();
-      if (!response && Dynamsoft.DDV.lastError) {
-        response = Dynamsoft.DDV.lastError.cause;
-      }
-      if (response instanceof Blob) {
-        result = await fileToBase64(response);
-      }
-      else {
-        message.cause = response;
-      }
-    }
-    catch (error) {
-      let response = error.cause ?? JSON.stringify(error, Object.getOwnPropertyNames(error));
-      message.cause = response;
-    }
-
-    return [message, result];
-  }
-
-
-  // call from .net
-
-function makesureDocOpened() {
-  let doc = editViewer.currentDocument;
-  if (!doc) {
-    doc = Dynamsoft.DDV.documentManager.createDocument();
-    editViewer.openDocument(doc.uid);
-  }
-  return doc;
-}
-
-function rotateLeft() {
-  return editViewer.rotate(-90);
-}
-
-function rotateRight() {
-  return editViewer.rotate(90);
-}
-
-async function saveAsPdf(indicies, settings) {
-  if (editViewer.currentDocument) {
-    if (indicies) {
-      if (settings) {
-        return await editViewer.currentDocument.saveToPdf(indicies, settings);
-      }
-      else {
-        return await editViewer.currentDocument.saveToPdf(indicies);
-      }
-    }
-    return await editViewer.currentDocument.saveToPdf();
-  }
-  else {
-    return {code:-80304, message:"no document opened"};
-  }
-}
-
-window.addEventListener('beforeunload', (event) => {
-  event.preventDefault();
-  event.returnValue = '';
-});
-
-async function clearAnnotations() {
-  let currentDoc = editViewer.currentDocument;
-  if (!currentDoc) {
-    alert("Please load a document first.");
-    return;
-  }
-
-  let currentPageId = currentDoc.pages[editViewer.getCurrentPageIndex()];
-  let annotations = Dynamsoft.DDV.annotationManager.getAnnotationsByPage(currentPageId);
-
-  if (annotations.length > 0) {
-    for (let i = 0; i < annotations.length; i++) {
-      // https://www.dynamsoft.com/document-viewer/docs/api/class/annotationmanager.html#deleteannotations
-
-      if (!annotations[i].flattened && annotations[i].name !== 'barcode') {
-        await Dynamsoft.DDV.annotationManager.deleteAnnotations([annotations[i].uid]);
-      }
-    }
-  }
-}
 </script>
 </html>

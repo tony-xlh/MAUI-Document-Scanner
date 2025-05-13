@@ -55,6 +55,7 @@ namespace DWT_REST_MAUI
             webView.SetInvokeJavaScriptTarget(this);
             InitViewer();
             RequestCameraPermission();
+            Debug.WriteLine("started");
         }
 
         private async void RequestCameraPermission() {
@@ -85,24 +86,6 @@ namespace DWT_REST_MAUI
                 return true;
             };
             bridge.RegisterCallback(callback); 
-            _documentViewer.DocumentSaved += (sender, args) =>
-            {
-                try
-                {
-                    string filePath = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "output_fromview.pdf");
-                    File.WriteAllBytes(filePath, args.Content);
-                }
-                catch (Exception ex)
-                {
-                    Debug.WriteLine(ex.Message);
-                    if (ex.Message != null) {
-                        MainThread.BeginInvokeOnMainThread(async () =>
-                        {
-                            await DisplayAlert("Alert", ex.Message, "OK");
-                        });
-                    }
-                }
-            };
         }
 
         public async void PickAndShow()
@@ -189,6 +172,7 @@ namespace DWT_REST_MAUI
                 var page = new ProgressPage();
                 page.RegisterCallback(cancelEvent);
                 await Navigation.PushModalAsync(page);
+                Debug.WriteLine("start scanning");
                 await ScanDocument();
                 if (!canceled)
                 {
@@ -235,6 +219,7 @@ namespace DWT_REST_MAUI
 
         private async Task<bool> ScanDocument()
         {
+            Debug.WriteLine("ScanDocument");
             try
             {
                 var license = Preferences.Get("License", productKey);
