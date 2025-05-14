@@ -98,7 +98,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\..\..\Workspaces\Products_DEV\DDV\.NET\DocumentCapture\DocumentViewer\Dynamsoft.WebViewer.csproj" />
+	  <ProjectReference Include="..\..\..\Workspaces\Products_DEV\DDV\.NET\DocumentViewer\Dynamsoft.WebViewer.csproj" />
 	  <ProjectReference Include="..\..\..\Workspaces\Products_DEV\DWT\REST\.NET\DynamicWebTWAIN.RestClient\RestClient\DynamicWebTWAIN.RestClient.csproj" />
 	</ItemGroup>
 

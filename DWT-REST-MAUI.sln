@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DWT-REST-MAUI", "DWT-REST-M
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynamicWebTWAIN.RestClient", "..\..\Workspaces\Products_DEV\DWT\REST\.NET\DynamicWebTWAIN.RestClient\RestClient\DynamicWebTWAIN.RestClient.csproj", "{18C30D5D-6FEC-DC5C-0416-6F52441C0375}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dynamsoft.WebViewer", "..\..\Workspaces\Products_DEV\DDV\.NET\DocumentCapture\DocumentViewer\Dynamsoft.WebViewer.csproj", "{032CDF15-27C7-DD79-5488-361F7E36DA28}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dynamsoft.WebViewer", "..\..\Workspaces\Products_DEV\DDV\.NET\DocumentViewer\Dynamsoft.WebViewer.csproj", "{032CDF15-27C7-DD79-5488-361F7E36DA28}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
