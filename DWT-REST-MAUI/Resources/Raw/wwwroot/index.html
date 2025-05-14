@@ -1,212 +1,41 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>DDV - HelloWorld</title>
-  <link rel="stylesheet" href="ddv/ddv.css">
-  <script src="ddv/ddv.js"></script>
-  <script src="dcv/dynamsoft-capture-vision-bundle/dist/dcv.bundle.js"></script>
-  <script src="livescanning.js"></script>
-  <script src="util.js"></script>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>DDV - HelloWorld</title>
+    <link rel="stylesheet" href="ddv.css">
+    <link rel="stylesheet" href="ddv-custom.css">
+    <script src="ddv.js"></script>
+    <script src="util.js"></script>
 </head>
 <style>
-  html,body {
-    width: 100%;
-    height: 100%;
-    margin:0;
-    padding:0;
-    overscroll-behavior-y: none;
-    overflow: hidden;
-  }
+    html, body {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        overscroll-behavior-y: none;
+        overflow: hidden;
+    }
 
-  ::-webkit-scrollbar {
-    display: none
-  }
-
-  #container {
-    position: fixed;    
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-  }
+    #container {
+        width: 100%;
+        height: 96%;
+    }
 </style>
 <body>
-  <div id="container"></div>
+    <div id="container"></div>
+    <!--<select id="sources">
+    </select>-->
+    <!--<input type="button" value="GetScanners" onclick="getSources();"/>
+    <input type="button" value="Scan Image" onclick="acquireImageFromScanner();"/>-->
+    <!--<input type="button" value="Capture Image" onclick="acquireImageFromCamera();" />-->
+    <!--<input type="button" value="Read barcode" onclick="scanBarcode();" />-->
+    <!--<input type="button" value="Save to pdf" onclick="onClickSaveToPdf();" />-->
 </body>
 <script>
-  let groupUid = "uniqueGroupId";
-  let editViewer;
-  let browseViewer;
-  async function initView(options) {
-    console.log(options);
-    let name = '';
-    try {
-      console.log(options.productKey);
-      productkey = options.productKey;
-      name = options.name;
-      messageType = options.messageType;
-    }
-    catch (error) {
-      console.log(error);
-    }
-    Dynamsoft.Core.CoreModule.engineResourcePaths.rootDirectory = "dcv";
-    Dynamsoft.Core.CoreModule.engineResourcePaths = {
-      std: 'dcv/dynamsoft-capture-vision-std/dist',
-      dip: 'dcv/dynamsoft-image-processing/dist',
-      core: 'dcv/dynamsoft-core/dist',
-      license: 'dcv/dynamsoft-license/dist',
-      cvr: 'dcv/dynamsoft-capture-vision-router/dist',
-      dbr: 'dcv/dynamsoft-barcode-reader/dist',
-      dce: 'dcv/dynamsoft-camera-enhancer/dist',
-      dcp: 'dcv/dynamsoft-code-parser/dist',
-      dlr: 'dcv/dynamsoft-label-recognizer/dist',
-      ddn: 'dcv/dynamsoft-document-normalizer/dist',
-      utility: 'dcv/dynamsoft-utility/dist',
-      dlrData: 'dcv/dynamsoft-label-recognizer-data/dist',
-      dnn: 'dcv/dynamsoft-capture-vision-dnn/dist',
-    };
-    await Dynamsoft.License.LicenseManager.initLicense("DLS2eyJoYW5kc2hha2VDb2RlIjoiMTAwMjI3NzYzLVRYbFFjbTlxIiwibWFpblNlcnZlclVSTCI6Imh0dHBzOi8vbWx0cy5keW5hbXNvZnQuY29tIiwib3JnYW5pemF0aW9uSUQiOiIxMDAyMjc3NjMiLCJzdGFuZGJ5U2VydmVyVVJMIjoiaHR0cHM6Ly9zbHRzLmR5bmFtc29mdC5jb20iLCJjaGVja0NvZGUiOjE4OTc4MDUzNDV9",true);
-    await Dynamsoft.Core.CoreModule.loadWasm(["DDN"]);
-    // Preload DDV Resource
-    Dynamsoft.DDV.Core.loadWasm();
-    await Dynamsoft.DDV.Core.init();
-    Dynamsoft.DDV.setProcessingHandler("imageFilter", new Dynamsoft.DDV.ImageFilter());
-    const config = {
-      type: Dynamsoft.DDV.Elements.Layout,
-      flexDirection: "column",
-      className: "ddv-edit-viewer-mobile",
-      children: [
-        {
-          type: Dynamsoft.DDV.Elements.Layout,
-          className: "ddv-edit-viewer-header-mobile",
-          children: [
-            {
-              // Add a "Back" buttom to header and bind click event to go back to the perspective viewer
-              // The event will be registered later.
-              type: Dynamsoft.DDV.Elements.Button,
-              className: "ddv-button-back",
-              events:{
-                click: "back"
-              }
-            },
-            Dynamsoft.DDV.Elements.Pagination
-          ],
-        },
-        Dynamsoft.DDV.Elements.MainView,
-        {
-          type: Dynamsoft.DDV.Elements.Layout,
-          className: "ddv-edit-viewer-footer-mobile",
-          children: [
-            Dynamsoft.DDV.Elements.DisplayMode,
-            Dynamsoft.DDV.Elements.RotateLeft,
-            Dynamsoft.DDV.Elements.Crop,
-            Dynamsoft.DDV.Elements.Filter,
-            Dynamsoft.DDV.Elements.Undo,
-            Dynamsoft.DDV.Elements.Delete,
-            {   
-                // Bind event for "PerspectiveAll" button to show the edit viewer
-                // The event will be registered later.
-                type: Dynamsoft.DDV.Elements.Button,
-                className: "ddv-load-image",
-                events:{
-                    click: "loadFile"
-                }
-            },
-          ],
-        },
-      ],
-    };
-    editViewer = new Dynamsoft.DDV.EditViewer({
-      groupUid: groupUid,
-      container: "container",
-      uiConfig: config,
-    });
-    browseViewer = new Dynamsoft.DDV.BrowseViewer({
-      groupUid: groupUid,
-      container: "container"
-    });
-    editViewer.hide();
-    editViewer.on("back",() => {
-      hideEditor();
-    });
-    editViewer.on("loadFile",() => {
-      const message = {
-        name: 'loadFile'
-      }
-        sendMessageToDotNet(JSON.stringify([message, "true"]));
-    });
-    await initForLiveScanning();
-    switchViewer(0,0,0,1);
-
-  }
-
-  // Define a function to control the viewers' visibility
-  function switchViewer(c,p,e,b) {
-    captureViewer.hide();
-    perspectiveViewer.hide();
-    editViewer.hide();
-    browseViewer.hide();
-
-    if(c) {
-      captureViewer.show();
-    } else {
-      captureViewer.stop();
-    }
-          
-    if(p) perspectiveViewer.show();
-    if(e) editViewer.show();
-    if(b) browseViewer.show();
-  };
-
-  function showEditor(){
-    switchViewer(0,0,1,0);
-  }
-
-  function hideEditor(){
-    switchViewer(0,0,0,1);
-  }
-
-  function createNewDocument() {
-    editViewer.closeDocument();
-    let doc = Dynamsoft.DDV.documentManager.createDocument();
-    editViewer.openDocument(doc.uid);
-  }
-
-  function base64toBlob(base64Data, contentType = '', sliceSize = 512) {
-    const byteCharacters = atob(base64Data);
-    const byteArrays = [];
-
-    for (let offset = 0; offset < byteCharacters.length; offset += sliceSize) {
-      const slice = byteCharacters.slice(offset, offset + sliceSize);
-
-      const byteNumbers = new Array(slice.length);
-      for (let i = 0; i < slice.length; i++) {
-        byteNumbers[i] = slice.charCodeAt(i);
-      }
-
-      const byteArray = new Uint8Array(byteNumbers);
-      byteArrays.push(byteArray);
-    }
-
-    const blob = new Blob(byteArrays, { type: contentType });
-    return blob;
-  }
-
-  async function loadImage(base64Image) {
-    try {
-      if (editViewer) {
-        let doc = makesureDocOpened();
-        await doc.loadSource(base64toBlob(base64Image));
-      }
-    } catch (error) {
-      console.error('Error loading document:', error);
-    } finally {
-    }
-  }
-
-
+    
 </script>
 </html>

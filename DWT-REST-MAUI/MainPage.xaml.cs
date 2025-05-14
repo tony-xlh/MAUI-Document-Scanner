@@ -67,7 +67,7 @@ namespace DWT_REST_MAUI
             // because we load ddv page in the service, so we should make sure the service is running, so we need to set a long timeout
             // or manual create a websocket connection in js, recommend this way.
             options.ProductKey = productKey;
-            options.SiteUrl = "index.html";
+            options.SiteUrl = "index-mobile.html";
             options.MessageType = "__RawMessage";
             var bridge = new HybridWebViewBridge(webView);
             _documentViewer = new Dynamsoft.WebViewer.DocumentViewer(options,
@@ -77,7 +77,7 @@ namespace DWT_REST_MAUI
             await _documentViewer.EnsureInitializedAsync();
             Func<string,bool> callback = (name) =>
             {
-                if (name == "loadFile") {
+                if (name.Contains("loadFile")) {
                     MainThread.BeginInvokeOnMainThread(() =>
                     {
                         PickAndShow();
@@ -105,7 +105,7 @@ namespace DWT_REST_MAUI
                     {
                         using var stream = await result.OpenReadAsync();
                         var bytes = await StreamToBytesAsync(stream);
-                        await webView.EvaluateJavaScriptAsync($"loadImage('{Convert.ToBase64String(bytes)}');");
+                        await _documentViewer.LoadFile(bytes);
                     }
                 }
             }
